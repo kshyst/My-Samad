@@ -33,34 +33,13 @@ def getThisWeekReservationOptionsList(token: str, self_id: str):
 
 def getThisWeekReserverdFoodsList(token: str, self_id: str):
     foods_list ={
-        "Saturday": {
-            "lunch": None,
-            "dinner": None
-        },
-        "Sunday": {
-            "lunch": None,
-            "dinner": None
-        },
-        "Monday": {
-            "lunch": None,
-            "dinner": None
-        },
-        "Tuesday": {
-            "lunch": None,
-            "dinner": None
-        },
-        "Wednesday": {
-            "lunch": None,
-            "dinner": None
-        },
-        "Thursday": {
-            "lunch": None,
-            "dinner": None
-        },
-        "Friday": {
-            "lunch": None,
-            "dinner": None
-        }
+        "Saturday": [],
+        "Sunday": [],
+        "Monday": [],
+        "Tuesday": [],
+        "Wednesday": [],
+        "Thursday": [],
+        "Friday": []
     }
 
     today = datetime.today()
@@ -71,9 +50,14 @@ def getThisWeekReserverdFoodsList(token: str, self_id: str):
     response = requests.get(url, headers={"Authorization": f"Bearer {token}"})
 
     if response.status_code == 200:
-        response = response.json()
+        try:
+            response = response.json()
+            for program in response['payload']['userWeekReserves']:
+                foods_list[getWeekDayName(program['programDate'])].append({program['selfName']: program['foodNames']})
+        except Exception as e:
+            print(f"Error in fetching reserved foods: {str(e)}")
 
-
+    return foods_list
 def beautifyReservationOptionsList(reservation_options_list: dict):
     reservation_options_string = ""
     try:
@@ -87,7 +71,20 @@ def beautifyReservationOptionsList(reservation_options_list: dict):
 
     return reservation_options_string
 
-def get_weekday_name(date_str):
+def beautifyReservedFoodsList(reserved_foods_list: dict):
+    reserved_foods_string = ""
+    try:
+        for day, foods in reserved_foods_list.items():
+            reserved_foods_string += f"{day}:\n"
+            if len(foods) > 0:
+                for food in foods:
+                    reserved_foods_string += f"  - {list(food.keys())[0]}: {list(food.values())[0]}\n"
+    except Exception as e:
+        reserved_foods_string = f"Error in fetching reserved foods: {str(e)}. Please try again later."
+
+    return reserved_foods_string
+
+def getWeekDayName(date_str):
     date_obj = datetime.strptime(date_str, '%Y-%m-%d')
     weekday_name = date_obj.strftime('%A')
     return weekday_name
