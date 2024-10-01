@@ -2,7 +2,7 @@ import requests
 from datetime import datetime, timedelta
 
 
-def getThisWeekReservationOptionsList(token: str, self_id: str):
+def getThisWeekReservationOptionsList(token: str, self_id: str , which_week: int):
     foods_list = {
         "Saturday": None,
         "Sunday": None,
@@ -14,7 +14,7 @@ def getThisWeekReservationOptionsList(token: str, self_id: str):
     }
 
     today = datetime.today()
-    saturday = today - timedelta((today.weekday() + 2) % 7)
+    saturday = today - timedelta((today.weekday() + 2) % 7) + timedelta(7 * which_week)
     saturday_str = saturday.strftime('%Y-%m-%d')
     url = f"https://setad.dining.sharif.edu/rest/programs/v2?selfId={self_id}&weekStartDate={saturday_str}" + "+00:00:00"
 

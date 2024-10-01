@@ -17,6 +17,7 @@ from telegram.ext import (
 from decouple import config
 
 import ReplyKeyboards
+import Reservation
 import Token
 
 USERNAME, PASSWORD, CHECK_CREDENTIALS = range(3)
@@ -58,6 +59,7 @@ async def login_command_handler_password(update: Update, context: ContextTypes.D
 async def login_command_handler_check_credentials(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     username = context.user_data["username"]
     password = update.effective_message.text
+    context.user_data["password"] = password
 
     if Token.getTokenResponse(username, password) is not None:
         #TODO save user credentials in database
@@ -80,6 +82,13 @@ async def login_command_handler_check_credentials(update: Update, context: Conte
         return USERNAME
 
 
+async def show_reservation_options(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    #TODO get self id for user
+    reservation_options = Reservation.beautifyReservationOptionsList(Reservation.getThisWeekReservationOptionsList( context.user_data["token"], "1", 1))
+    await context.bot.send_message(
+        chat_id=update.effective_chat.id,
+        text= reservation_options
+    )
 
 
 if __name__ == "__main__":
