@@ -19,8 +19,10 @@ from decouple import config
 import ReplyKeyboards
 import Reservation
 import Token
-
-USERNAME, PASSWORD , CHECK_CREDENTIALS = range(3)
+import dicts
+from dicts import USERNAME, PASSWORD, CHECK_CREDENTIALS
+from LoginFunctions import login_command_handler_username, login_command_handler_password, \
+    login_command_handler_check_credentials
 
 
 async def start_command_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -32,54 +34,6 @@ async def start_command_handler(update: Update, context: ContextTypes.DEFAULT_TY
         reply_to_message_id=update.effective_message.id,
         reply_markup=ReplyKeyboardMarkup(ReplyKeyboards.reply_keyboard_not_logged_in, one_time_keyboard=True),
     )
-
-
-async def login_command_handler_username(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
-    await context.bot.send_message(
-        chat_id=update.effective_chat.id,
-        text="لطفا نام کاربری حساب سماد خود را وارد کنید.",
-        reply_to_message_id=update.effective_message.id,
-    )
-
-    return PASSWORD
-
-
-async def login_command_handler_password(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
-    context.user_data["username"] = update.effective_message.text
-
-    await context.bot.send_message(
-        chat_id=update.effective_chat.id,
-        text="لطفا رمز عبور حساب سماد خود را وارد کنید.",
-        reply_to_message_id=update.effective_message.id,
-    )
-
-    return CHECK_CREDENTIALS
-
-
-async def login_command_handler_check_credentials(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
-    username = context.user_data["username"]
-    password = update.effective_message.text
-    context.user_data["password"] = password
-
-    if Token.getTokenResponse(username, password) is not None:
-        #TODO save user credentials in database
-
-        context.user_data["token"] = Token.getAccessToken(username, password)
-
-        await context.bot.send_message(
-            chat_id=update.effective_chat.id,
-            text="ورود موفقیت آمیز بود.",
-            reply_to_message_id=update.effective_message.id,
-            reply_markup=ReplyKeyboardMarkup(ReplyKeyboards.reply_keyboard_logged_in, one_time_keyboard=True),
-        )
-        return ConversationHandler.END
-    else:
-        await context.bot.send_message(
-            chat_id=update.effective_chat.id,
-            text="ورود ناموفق بود. لطفا دوباره تلاش کنید.",
-            reply_to_message_id=update.effective_message.id,
-        )
-        return USERNAME
 
 
 async def login_command_handler_get_selfs(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
@@ -96,8 +50,8 @@ async def login_command_handler_get_selfs(update: Update, context: ContextTypes.
 
 async def show_reservation_options(update: Update, context: ContextTypes.DEFAULT_TYPE):
     #TODO get self id for user
-    reservation_options = Reservation.beautifyReservationOptionsList(Reservation.getThisWeekReservationOptionsList(context.user_data["token"], "1", 1))
-
+    reservation_options = Reservation.beautifyReservationOptionsList(
+        Reservation.getThisWeekReservationOptionsList(context.user_data["token"], "1", 1))
 
 
 if __name__ == "__main__":
@@ -108,7 +62,7 @@ if __name__ == "__main__":
     app.add_handler(
         ConversationHandler(
             entry_points=[
-                MessageHandler(filters.Text("ورود به حساب سماد"), login_command_handler_username)
+                MessageHandler(filters.Text(dicts.Commands.LOG_IN_TO_SAMAD), login_command_handler_username)
             ],
             states={
                 USERNAME: [
@@ -130,11 +84,11 @@ if __name__ == "__main__":
         )
     )
 
-    #See Reservation Options Conversation
+    #User Settings conversations
     app.add_handler(
         ConversationHandler(
             entry_points=[
-
+                MessageHandler(filters.Text(dicts.Commands.USER_SETTINGS))
             ],
             states={
 
