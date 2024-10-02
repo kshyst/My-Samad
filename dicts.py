@@ -1,3 +1,15 @@
+from enum import Enum
+
+
+class Commands(Enum):
+    LOG_IN_TO_SAMAD = "ورود به حساب سماد"
+    USER_SETTINGS = "تنظیمات حساب کاربری"
+    CHOOSE_SELF_SETTINGS = "انتخاب سلف ها"
+    LOGOUT_SETTINGS = "خروج از حساب کاربری"
+    CHARGE_ACCOUNT = "شارژ حساب"
+    RESERVE_FOOD = "رزرو غذا"
+    EXIT_SETTINGS = "خروج از تنظیمات"
+
 
 week_day_dict = {
     "satruday": "شنبه",
@@ -16,3 +28,4 @@ week_day_dict = {
     "Friday": "جمعه"
 }
 
+USERNAME, PASSWORD, CHECK_CREDENTIALS = range(3)

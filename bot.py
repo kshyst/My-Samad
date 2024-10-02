@@ -18,10 +18,11 @@ from decouple import config
 
 import ReplyKeyboards
 import Reservation
+import SettingsMenu
 import Token
 import dicts
 from dicts import USERNAME, PASSWORD, CHECK_CREDENTIALS
-from LoginFunctions import login_command_handler_username, login_command_handler_password, \
+from LoginMenu import login_command_handler_username, login_command_handler_password, \
     login_command_handler_check_credentials
 
 
@@ -57,12 +58,12 @@ async def show_reservation_options(update: Update, context: ContextTypes.DEFAULT
 if __name__ == "__main__":
     app = ApplicationBuilder().token(config("BOT_TOKEN")).build()
     app.add_handler(CommandHandler("start", start_command_handler))
-
+    app.add_handler(MessageHandler(filters.Text(dicts.Commands.USER_SETTINGS.value) , SettingsMenu.settings_command_handler_enter_menu))
     # Log in Conversation
     app.add_handler(
         ConversationHandler(
             entry_points=[
-                MessageHandler(filters.Text(dicts.Commands.LOG_IN_TO_SAMAD), login_command_handler_username)
+                MessageHandler(filters.Text(dicts.Commands.LOG_IN_TO_SAMAD.value), login_command_handler_username)
             ],
             states={
                 USERNAME: [
@@ -84,19 +85,4 @@ if __name__ == "__main__":
         )
     )
 
-    #User Settings conversations
-    app.add_handler(
-        ConversationHandler(
-            entry_points=[
-                MessageHandler(filters.Text(dicts.Commands.USER_SETTINGS))
-            ],
-            states={
-
-            },
-            fallbacks=[
-
-            ],
-            allow_reentry=True,
-        )
-    )
     app.run_polling()
