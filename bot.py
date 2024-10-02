@@ -20,7 +20,7 @@ import ReplyKeyboards
 import Reservation
 import Token
 
-USERNAME, PASSWORD, CHECK_CREDENTIALS = range(3)
+USERNAME, PASSWORD , CHECK_CREDENTIALS = range(3)
 
 
 async def start_command_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -70,7 +70,7 @@ async def login_command_handler_check_credentials(update: Update, context: Conte
             chat_id=update.effective_chat.id,
             text="ورود موفقیت آمیز بود.",
             reply_to_message_id=update.effective_message.id,
-            reply_keyboard_markup=ReplyKeyboardMarkup(ReplyKeyboards.reply_keyboard_logged_in, one_time_keyboard=True),
+            reply_markup=ReplyKeyboardMarkup(ReplyKeyboards.reply_keyboard_logged_in, one_time_keyboard=True),
         )
         return ConversationHandler.END
     else:
@@ -82,13 +82,22 @@ async def login_command_handler_check_credentials(update: Update, context: Conte
         return USERNAME
 
 
-async def show_reservation_options(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    #TODO get self id for user
-    reservation_options = Reservation.beautifyReservationOptionsList(Reservation.getThisWeekReservationOptionsList( context.user_data["token"], "1", 1))
+async def login_command_handler_get_selfs(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+    #TODO get selfs list from server
+    selfs_list = Reservation.getSelfsList(context.user_data["token"])
+
     await context.bot.send_message(
         chat_id=update.effective_chat.id,
-        text= reservation_options
+        text="سلف های خود را انتخاب کنید",
+        reply_to_message_id=update.effective_message.id,
+        reply_markup=ReplyKeyboardMarkup(ReplyKeyboards.reply_keyboard_self)
     )
+
+
+async def show_reservation_options(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    #TODO get self id for user
+    reservation_options = Reservation.beautifyReservationOptionsList(Reservation.getThisWeekReservationOptionsList(context.user_data["token"], "1", 1))
+
 
 
 if __name__ == "__main__":

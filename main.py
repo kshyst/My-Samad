@@ -1,6 +1,7 @@
 import json
 
 import Reservation
+import Selfs
 import Token
 from decouple import config
 
@@ -12,6 +13,8 @@ print(config("u_name"))
 
 #print(Reservation.getWeekDayName("2021-12-25"))
 #print(Reservation.beautifyReservationOptionsList(Reservation.getThisWeekReservationOptionsList(Token.getAccessToken( data['username'], data['password']) , "1")))
-print(Reservation.beautifyReservationOptionsList(Reservation.getThisWeekReservationOptionsList(Token.getAccessToken( data['username'], data['password']) , "3" , 0)))
+#print(Reservation.beautifyReservationOptionsList(Reservation.getThisWeekReservationOptionsList(Token.getAccessToken( data['username'], data['password']) , "3" , 0)))
 
 #print(Reservation.beautifyReservedFoodsList(Reservation.getThisWeekReserverdFoodsList(Token.getAccessToken(config("u_name"), config("p_word")) , "1")))
+
+print(Selfs.get_self_list(Token.getAccessToken(config("u_name"), config("p_word"))))
