@@ -15,7 +15,6 @@ async def settings_command_handler_enter_menu(update: Update, context: ContextTy
         await context.bot.send_message(
             chat_id=update.effective_chat.id,
             text="به تنظیمات خوش آمدید!",
-            reply_to_message_id=update.effective_message.id,
             reply_markup=InlineKeyboardMarkup.from_column([
                 InlineKeyboardButton(text=str(dicts.Commands.CHOOSE_SELF_SETTINGS.value), callback_data="choose_self"),
                 InlineKeyboardButton(text=str(dicts.Commands.LOGOUT_SETTINGS.value), callback_data="logout"),

@@ -12,7 +12,7 @@ from telegram.ext import (
     ConversationHandler,
     filters,
     MessageHandler,
-    InlineQueryHandler,
+    InlineQueryHandler, CallbackQueryHandler,
 )
 from decouple import config
 
@@ -59,6 +59,8 @@ if __name__ == "__main__":
     app = ApplicationBuilder().token(config("BOT_TOKEN")).build()
     app.add_handler(CommandHandler("start", start_command_handler))
     app.add_handler(MessageHandler(filters.Text(dicts.Commands.USER_SETTINGS.value) , SettingsMenu.settings_command_handler_enter_menu))
+    app.add_handler(CallbackQueryHandler(SettingsMenu.settings_command_handler_enter_menu))
+
     # Log in Conversation
     app.add_handler(
         ConversationHandler(
