@@ -16,50 +16,46 @@ from telegram.ext import (
 )
 from decouple import config
 
+import CallBackQueries
 import ReplyKeyboards
 import Reservation
-import SettingsMenu
 import Token
 import dicts
+from SettingsMenu import settings_command_handler_enter_menu, settings_command_handler_choose_self
 from dicts import USERNAME, PASSWORD, CHECK_CREDENTIALS
 from LoginMenu import login_command_handler_username, login_command_handler_password, \
     login_command_handler_check_credentials
+import logging
+
+logging.basicConfig(
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
+)
 
 
 async def start_command_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     #TODO change reply keyboard based on if user is logged in or not
 
-    await context.bot.send_message(
-        chat_id=update.effective_chat.id,
-        text="به ربات سماد من خوش آمدید!",
-        reply_to_message_id=update.effective_message.id,
-        reply_markup=ReplyKeyboardMarkup(ReplyKeyboards.reply_keyboard_not_logged_in, one_time_keyboard=True),
-    )
-
-
-async def login_command_handler_get_selfs(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
-    #TODO get selfs list from server
-    selfs_list = Reservation.getSelfsList(context.user_data["token"])
-
-    await context.bot.send_message(
-        chat_id=update.effective_chat.id,
-        text="سلف های خود را انتخاب کنید",
-        reply_to_message_id=update.effective_message.id,
-        reply_markup=ReplyKeyboardMarkup(ReplyKeyboards.reply_keyboard_self)
-    )
-
-
-async def show_reservation_options(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    #TODO get self id for user
-    reservation_options = Reservation.beautifyReservationOptionsList(
-        Reservation.getThisWeekReservationOptionsList(context.user_data["token"], "1", 1))
+    if context.user_data.get("token") is None:
+        await context.bot.send_message(
+            chat_id=update.effective_chat.id,
+            text="به ربات سماد من خوش آمدید!",
+            reply_to_message_id=update.effective_message.id,
+            reply_markup=ReplyKeyboardMarkup(ReplyKeyboards.reply_keyboard_not_logged_in, one_time_keyboard=True),
+        )
+    else:
+        await context.bot.send_message(
+            chat_id=update.effective_chat.id,
+            text="به ربات سماد من خوش آمدید!",
+            reply_to_message_id=update.effective_message.id,
+            reply_markup=ReplyKeyboardMarkup(ReplyKeyboards.reply_keyboard_logged_in, one_time_keyboard=True),
+        )
 
 
 if __name__ == "__main__":
     app = ApplicationBuilder().token(config("BOT_TOKEN")).build()
     app.add_handler(CommandHandler("start", start_command_handler))
-    app.add_handler(MessageHandler(filters.Text(dicts.Commands.USER_SETTINGS.value) , SettingsMenu.settings_command_handler_enter_menu))
-    app.add_handler(CallbackQueryHandler(SettingsMenu.settings_command_handler_enter_menu))
+    app.add_handler(
+        MessageHandler(filters.Text(dicts.Commands.USER_SETTINGS.value), settings_command_handler_enter_menu))
 
     # Log in Conversation
     app.add_handler(
