@@ -14,5 +14,5 @@ reply_keyboard_not_logged_in = [
 user_settings_inline_buttons = [
                 InlineKeyboardButton(text=str(dicts.Commands.CHOOSE_SELF_SETTINGS.value), callback_data="choose_self"),
                 InlineKeyboardButton(text=str(dicts.Commands.LOGOUT_SETTINGS.value), callback_data="logout"),
-                InlineKeyboardButton(text=str(dicts.Commands.EXIT_SETTINGS.value), callback_data="exit")
+                InlineKeyboardButton(text=str(dicts.Commands.EXIT_SETTINGS.value), callback_data="exit_user_menu")
 ]

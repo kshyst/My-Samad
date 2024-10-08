@@ -16,6 +16,7 @@ from telegram.ext import (
 )
 from decouple import config
 
+import App
 import CallBackQueries
 import ReplyKeyboards
 import Reservation
@@ -50,13 +51,15 @@ async def start_command_handler(update: Update, context: ContextTypes.DEFAULT_TY
             reply_markup=ReplyKeyboardMarkup(ReplyKeyboards.reply_keyboard_logged_in, one_time_keyboard=True),
         )
 
-
 if __name__ == "__main__":
-    app = ApplicationBuilder().token(config("BOT_TOKEN")).build()
+    app = App.app
     app.add_handler(CommandHandler("start", start_command_handler))
     app.add_handler(
         MessageHandler(filters.Text(dicts.Commands.USER_SETTINGS.value), settings_command_handler_enter_menu))
 
+
+    # Callback Query Handlers
+    app.add_handler(CallbackQueryHandler(CallBackQueries.user_settings_callback_handler , pattern=CallBackQueries.settings_callback_regex))
     # Log in Conversation
     app.add_handler(
         ConversationHandler(

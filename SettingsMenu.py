@@ -25,6 +25,7 @@ async def settings_command_handler_choose_self(update: Update, context: ContextT
     if context.user_data.get("selfs_list") is None:
         selfs_list = Selfs.get_self_list(context.user_data["token"])
         context.user_data["selfs_list"] = selfs_list
+        Selfs.create_selfs_callback_handler(selfs_list)
 
     #create a inline button for self list
     if context.user_data["selfs_list"] is not None:
@@ -45,9 +46,11 @@ async def settings_command_handler_choose_self(update: Update, context: ContextT
 
 
 async def settings_command_handler_logout(update, context):
+    print("logging out")
     pass
 
 
 async def settings_command_handler_exit(update, context):
+    print("exiting user menu")
     print(context.user_data["self_ids"])
     pass
