@@ -1,28 +1,21 @@
-import json
-from typing import Final
-
 from telegram import (
     Update,
-    InlineQueryResultPhoto, ReplyKeyboardMarkup,
+    ReplyKeyboardMarkup,
 )
 from telegram.ext import (
-    ApplicationBuilder,
     ContextTypes,
     CommandHandler,
     ConversationHandler,
     filters,
     MessageHandler,
-    InlineQueryHandler, CallbackQueryHandler,
+    CallbackQueryHandler,
 )
-from decouple import config
 
 import App
 import CallBackQueries
 import ReplyKeyboards
-import Reservation
-import Token
 import dicts
-from SettingsMenu import settings_command_handler_enter_menu, settings_command_handler_choose_self
+from SettingsMenu import settings_command_handler_enter_menu
 from dicts import USERNAME, PASSWORD, CHECK_CREDENTIALS
 from LoginMenu import login_command_handler_username, login_command_handler_password, \
     login_command_handler_check_credentials
@@ -59,7 +52,7 @@ if __name__ == "__main__":
 
 
     # Callback Query Handlers
-    app.add_handler(CallbackQueryHandler(CallBackQueries.user_settings_callback_handler , pattern=CallBackQueries.settings_callback_regex))
+    app.add_handler(CallbackQueryHandler(CallBackQueries.user_settings_callback_handler, pattern=CallBackQueries.settings_callback_regex))
     # Log in Conversation
     app.add_handler(
         ConversationHandler(

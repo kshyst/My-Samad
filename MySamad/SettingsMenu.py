@@ -7,9 +7,7 @@ from telegram.ext import (
     ContextTypes,
 )
 
-import CallBackQueries
 import Selfs
-import dicts
 
 
 async def settings_command_handler_enter_menu(update: Update, context: ContextTypes.DEFAULT_TYPE):

@@ -6,19 +6,19 @@ from django.db import models
 class UserAccount(models.Model):
     username = models.CharField(max_length=50)
     password = models.CharField(max_length=50)
-    telegramId = models.CharField(max_length=50)
-    token = models.CharField(max_length=50)
-    refresh_token = models.CharField(max_length=50)
-    token_expiration = models.DateTimeField()
-    selfs = models.ManyToOneRel('Selfs', on_delete=models.CASCADE)
+    telegram_id = models.CharField(max_length=50)
+    token = models.CharField(max_length=50 , null=True)
+    refresh_token = models.CharField(max_length=50 , null=True)
+    token_expiration = models.DateTimeField(null=True)
+    self = models.ManyToOneRel('Self', on_delete=models.CASCADE , to='Self' , field_name='self')
 
     def __str__(self):
         return self.username
 
 
-class Selfs(models.Model):
+class Self(models.Model):
     name = models.CharField(max_length=50)
-    id = models.CharField(max_length=50)
+    self_id = models.CharField(max_length=50)
 
     def __str__(self):
         return self.name

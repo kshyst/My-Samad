@@ -7,6 +7,7 @@ from telegram.ext import (
     ConversationHandler,
 )
 
+import Database
 import ReplyKeyboards
 import Token
 from dicts import USERNAME, PASSWORD, CHECK_CREDENTIALS
@@ -40,7 +41,9 @@ async def login_command_handler_check_credentials(update: Update, context: Conte
     context.user_data["password"] = password
 
     if Token.getTokenResponse(username, password) is not None:
-        #TODO save user credentials in database
+
+        #save user credentials in database
+        await Database.save_user_in_database(update, context)
 
         context.user_data["token"] = Token.getAccessToken(username, password)
 

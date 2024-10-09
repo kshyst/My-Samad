@@ -1,8 +1,6 @@
 import json
 
-import Reservation
-import Selfs
-import Token
+from MySamad import Token, Selfs
 from decouple import config
 
 data = None

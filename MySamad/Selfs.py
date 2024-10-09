@@ -1,6 +1,5 @@
 import requests
-from telegram import Update
-from telegram.ext import ContextTypes, CallbackQueryHandler
+from telegram.ext import CallbackQueryHandler
 
 import App
 import CallBackQueries
