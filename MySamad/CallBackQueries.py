@@ -1,8 +1,10 @@
 import re
 
 import SettingsMenu
+import Database
 
 settings_callback_regex = re.compile("^(choose_self)|(logout)|(exit_user_menu)$")
+exit_self_menu_regex = re.compile("^exit_self_menu$")
 
 
 async def user_settings_callback_handler(update, context):
@@ -30,11 +32,25 @@ async def selfs_callback_handler(update, context):
             if context.user_data.get("self_ids") is None:
                 context.user_data["self_ids"] = []
             if data in context.user_data["selfs_list"]:
-                context.user_data["self_ids"].append(context.user_data["selfs_list"][data])
+                context.user_data["self_ids"].append({data: context.user_data["selfs_list"][data]})
                 await query.answer("سلف انتخاب شد.")
             else:
                 await query.answer("سلف نامعتبر است.")
     except Exception as e:
         print(e)
         await query.answer("خطا در انتخاب سلف.")
+        return
+
+
+async def exit_self_menu_handler(update, context):
+    query = update.callback_query
+    data = query.data
+
+    if exit_self_menu_regex.match(data):
+        await query.answer("خروج از منوی سلف.")
+        await query.message.delete()
+
+        await Database.add_self_to_existing_user(update, context)
+    else:
+        await query.answer("دستور نامعتبر است.")
         return

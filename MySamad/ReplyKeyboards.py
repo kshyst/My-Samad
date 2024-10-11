@@ -3,7 +3,7 @@ from telegram import InlineKeyboardButton
 import dicts
 
 reply_keyboard_logged_in = [
-    ["مشاهده لیست غذا هفته بعد" , dicts.Commands.RESERVE_FOOD.value],
+    [dicts.Commands.SEE_RESERVED_LIST.value , dicts.Commands.RESERVE_FOOD.value],
     [dicts.Commands.CHARGE_ACCOUNT.value, dicts.Commands.USER_SETTINGS.value],
 ]
 

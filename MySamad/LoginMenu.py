@@ -14,6 +14,15 @@ from dicts import USERNAME, PASSWORD, CHECK_CREDENTIALS
 
 
 async def login_command_handler_username(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+    if await Database.is_user_logged_in(update, context):
+        await context.bot.send_message(
+            chat_id=update.effective_chat.id,
+            text="خوش آمدید!",
+            reply_to_message_id=update.effective_message.id,
+            reply_markup=ReplyKeyboardMarkup(ReplyKeyboards.reply_keyboard_logged_in, one_time_keyboard=True),
+        )
+        return ConversationHandler.END
+
     await context.bot.send_message(
         chat_id=update.effective_chat.id,
         text="لطفا نام کاربری حساب سماد خود را وارد کنید.",

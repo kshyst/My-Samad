@@ -9,6 +9,7 @@ class Commands(Enum):
     CHARGE_ACCOUNT = "شارژ حساب"
     RESERVE_FOOD = "رزرو غذا"
     EXIT_SETTINGS = "خروج از تنظیمات"
+    SEE_RESERVED_LIST = "مشاهده لیست غذا های رزرو شده"
 
 
 week_day_dict = {

@@ -27,13 +27,13 @@ async def settings_command_handler_choose_self(update: Update, context: ContextT
 
     #create a inline button for self list
     if context.user_data["selfs_list"] is not None:
+        self_inlines = [InlineKeyboardButton(text=str(self), callback_data=str(self)) for self in context.user_data["selfs_list"]]
+        self_inlines.append(InlineKeyboardButton(text="خروج و ذخیره", callback_data="exit_self_menu"))
+
         await context.bot.send_message(
             chat_id=update.effective_chat.id,
             text="لطفا سلف مورد نظر خود را انتخاب کنید.",
-            reply_markup=InlineKeyboardMarkup.from_column(
-                [InlineKeyboardButton(text=str(self), callback_data=str(self)) for self in
-                 context.user_data["selfs_list"]]
-            )
+            reply_markup=InlineKeyboardMarkup.from_column(self_inlines)
         )
     else:
         await context.bot.send_message(
