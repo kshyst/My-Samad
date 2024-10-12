@@ -8,12 +8,15 @@ from telegram.ext import (
 )
 
 import Selfs
+import Database
 
 
 async def settings_command_handler_enter_menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await Database.get_user_info(update, context)
     await context.bot.send_message(
         chat_id=update.effective_chat.id,
-        text="به تنظیمات خوش آمدید!",
+        text=f"کاربر تلگرام: {update.effective_user.id} \n"
+             f"اکانت سماد: {context.user_data.get('username')} \n",
         reply_markup=InlineKeyboardMarkup.from_column(ReplyKeyboards.user_settings_inline_buttons)
     )
 

@@ -36,6 +36,7 @@ async def selfs_callback_handler(update, context):
                 await query.answer("سلف انتخاب شد.")
             else:
                 await query.answer("سلف نامعتبر است.")
+            print(context.user_data["self_ids"])
     except Exception as e:
         print(e)
         await query.answer("خطا در انتخاب سلف.")

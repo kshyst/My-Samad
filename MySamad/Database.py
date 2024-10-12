@@ -46,7 +46,7 @@ async def is_user_logged_in(update: Update, context: ContextTypes.DEFAULT_TYPE):
         if user is not None:
             context.user_data["username"] = user.username
             context.user_data["password"] = user.password
-            context.user_data["self_ids"] = [self.self_id for self in
+            context.user_data["self_ids"] = [{self.name :self.self_id} for self in
                                              await sync_to_async(lambda: list(user.self.all()))()]
             context.user_data["token"] = Token.getAccessToken(user.username, user.password)
             return True
@@ -54,3 +54,8 @@ async def is_user_logged_in(update: Update, context: ContextTypes.DEFAULT_TYPE):
             return False
     except models.UserAccount.DoesNotExist:
         return False
+
+
+async def get_user_info(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    if context.user_data.get("username") is None:
+        await is_user_logged_in(update, context)

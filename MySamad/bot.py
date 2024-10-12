@@ -15,6 +15,7 @@ import App
 import CallBackQueries
 import ReplyKeyboards
 import dicts
+import Database
 from SettingsMenu import settings_command_handler_enter_menu
 from dicts import USERNAME, PASSWORD, CHECK_CREDENTIALS
 from LoginMenu import login_command_handler_username, login_command_handler_password, \
