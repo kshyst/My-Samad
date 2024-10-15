@@ -32,6 +32,7 @@ async def add_self_to_existing_user(update: Update, context: ContextTypes.DEFAUL
 
     await sync_to_async(user.save)()
 
+
 async def get_selfs_list(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user = models.UserAccount.objects.get(telegramId=update.effective_user.id)
     selfs_list = {}
@@ -46,7 +47,7 @@ async def is_user_logged_in(update: Update, context: ContextTypes.DEFAULT_TYPE):
         if user is not None:
             context.user_data["username"] = user.username
             context.user_data["password"] = user.password
-            context.user_data["self_ids"] = [{self.name :self.self_id} for self in
+            context.user_data["self_ids"] = [{self.name: self.self_id} for self in
                                              await sync_to_async(lambda: list(user.self.all()))()]
             context.user_data["token"] = Token.getAccessToken(user.username, user.password)
             return True
@@ -59,3 +60,11 @@ async def is_user_logged_in(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def get_user_info(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if context.user_data.get("username") is None:
         await is_user_logged_in(update, context)
+
+
+async def delete_user_self_list(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user = await sync_to_async(models.UserAccount.objects.get)(telegram_id=update.effective_user.id)
+    for self in await sync_to_async(lambda: list(user.self.all()))():
+        await sync_to_async(self.delete)()
+    await sync_to_async(user.save)()
+    context.user_data["self_ids"] = []

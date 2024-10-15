@@ -54,6 +54,7 @@ if __name__ == "__main__":
     # Callback Query Handlers
     app.add_handler(CallbackQueryHandler(CallBackQueries.user_settings_callback_handler, pattern=CallBackQueries.settings_callback_regex))
     app.add_handler(CallbackQueryHandler(CallBackQueries.exit_self_menu_handler, pattern=CallBackQueries.exit_self_menu_regex))
+    app.add_handler(CallbackQueryHandler(CallBackQueries.delete_self_list_handler, pattern=CallBackQueries.delete_self_list_regex))
     # Log in Conversation
     app.add_handler(
         ConversationHandler(

@@ -13,10 +13,19 @@ import Database
 
 async def settings_command_handler_enter_menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await Database.get_user_info(update, context)
+
+    self_names_list = []
+    for self in context.user_data["self_ids"]:
+        for name, _ in self.items():
+            self_names_list.append(name)
+
+    self_names_list = list(dict.fromkeys(self_names_list))
+
     await context.bot.send_message(
         chat_id=update.effective_chat.id,
         text=f"کاربر تلگرام: {update.effective_user.id} \n"
-             f"اکانت سماد: {context.user_data.get('username')} \n",
+             f"اکانت سماد: {context.user_data.get('username')} \n"
+             f"سلف های شما: \n{'\n'.join(self_names_list)}",
         reply_markup=InlineKeyboardMarkup.from_column(ReplyKeyboards.user_settings_inline_buttons)
     )
 
@@ -31,6 +40,7 @@ async def settings_command_handler_choose_self(update: Update, context: ContextT
     #create a inline button for self list
     if context.user_data["selfs_list"] is not None:
         self_inlines = [InlineKeyboardButton(text=str(self), callback_data=str(self)) for self in context.user_data["selfs_list"]]
+        self_inlines.append(InlineKeyboardButton(text="پاک کردن لیست سلف های انتخاب شده", callback_data="delete_self_list"))
         self_inlines.append(InlineKeyboardButton(text="خروج و ذخیره", callback_data="exit_self_menu"))
 
         await context.bot.send_message(

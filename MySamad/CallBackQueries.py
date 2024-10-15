@@ -5,6 +5,7 @@ import Database
 
 settings_callback_regex = re.compile("^(choose_self)|(logout)|(exit_user_menu)$")
 exit_self_menu_regex = re.compile("^exit_self_menu$")
+delete_self_list_regex = re.compile("^delete_self_list$")
 
 
 async def user_settings_callback_handler(update, context):
@@ -52,6 +53,18 @@ async def exit_self_menu_handler(update, context):
         await query.message.delete()
 
         await Database.add_self_to_existing_user(update, context)
+    else:
+        await query.answer("دستور نامعتبر است.")
+        return
+
+
+async def delete_self_list_handler(update, context):
+    query = update.callback_query
+    data = query.data
+
+    if delete_self_list_regex.match(data):
+        await Database.delete_user_self_list(update, context)
+        await query.answer("لیست سلف ها پاک شد.")
     else:
         await query.answer("دستور نامعتبر است.")
         return
