@@ -16,6 +16,7 @@ import CallBackQueries
 import ReplyKeyboards
 import dicts
 import Database
+import ReservedListMenu
 from SettingsMenu import settings_command_handler_enter_menu
 from dicts import USERNAME, PASSWORD, CHECK_CREDENTIALS
 from LoginMenu import login_command_handler_username, login_command_handler_password, \
@@ -49,7 +50,7 @@ if __name__ == "__main__":
     app = App.app
     app.add_handler(CommandHandler("start", start_command_handler))
     app.add_handler(MessageHandler(filters.Text(dicts.Commands.USER_SETTINGS.value), settings_command_handler_enter_menu))
-
+    app.add_handler(MessageHandler(filters.Text(dicts.Commands.SEE_RESERVED_LIST.value), ReservedListMenu.reserved_list_enter_menu_command_handler))
 
     # Callback Query Handlers
     app.add_handler(CallbackQueryHandler(CallBackQueries.user_settings_callback_handler, pattern=CallBackQueries.settings_callback_regex))

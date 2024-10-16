@@ -10,6 +10,7 @@ class Commands(Enum):
     RESERVE_FOOD = "رزرو غذا"
     EXIT_SETTINGS = "خروج از تنظیمات"
     SEE_RESERVED_LIST = "مشاهده لیست غذا های رزرو شده"
+    EXIT_SEE_RESERVED_MENU = "بازگشت به منو اصلی"
 
 
 week_day_dict = {
